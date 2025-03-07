@@ -23,6 +23,7 @@ dev = [
     "bandit",
     "ipython",
     "pandas-stubs",
+    "notebook>=7.3.2",
 ]
 
 [tool.bandit]
