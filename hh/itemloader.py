@@ -63,8 +63,9 @@ class VacancyLoader(ItemLoader):
     vacancy_skills_out = Join(", ")
     vacancy_salary_in = MapCompose(
         SelectJmes("[vacancy.salary.from, vacancy.salary.to]"),
+        lambda x: str(x) if x else None,
     )
-    vacancy_skills_out = Join("-")
+    vacancy_salary_out = Join("-")
     vacancy_description_in = MapCompose(
         SelectJmes("vacancy.description"),
         remove_tags,
