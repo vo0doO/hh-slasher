@@ -3,19 +3,16 @@ from urllib.parse import urlencode
 from scrapy.http import Request
 
 
-def make_search_by_text(self, country, text, page=0) -> Request:
-    data = dict(country=country, text=text)
+def make_search_by_text(self, country, text, page=0, excluded_text="") -> Request:
+    data = dict(country=country, text=text, excluded_text=excluded_text)
     api_path = "vacancies"
     params = {
         "text": text,
+        "excluded_text": ', '.join(excluded_text),
         "area": country["areas"],
         "page": page,
         "per_page": 100,
-        "search_field": [
-            "name",
-            # "description",
-            # "company_name",
-        ],
+        "search_field": self.search_field,
         "premium": True,
         "order_by": "publication_time",
         "describe_arguments": True,

@@ -52,8 +52,17 @@ class Spider(scrapy.Spider):
         #     "areas": [48],
         # },
     }
+    search_field = [
+        "name",
+        "description",
+        # "company_name",
+    ]
     search_texts = [
-        "Python middle",
+        "Vue",
+    ]
+    excluded_text = [
+        "Fullstack",
+        "Full stack",
     ]
 
     def start_requests(self) -> Generator:
@@ -61,7 +70,9 @@ class Spider(scrapy.Spider):
 
         for country in self.countries.values():
             for text in self.search_texts:
-                yield vacancies_request.make_search_by_text(self, country, text)
+                yield vacancies_request.make_search_by_text(
+                    self, country, text, excluded_text=self.excluded_text
+                )
 
     def parse_vacancies_listing(self, response: HtmlResponse, **kwargs) -> Generator:
         data: dict = response.json()  # type: ignore
@@ -85,11 +96,15 @@ class Spider(scrapy.Spider):
                 self, vacancy_of_listing=vacancy, text=kwargs["text"]
             )
 
-        # # Пагинация
-        # if data["page"] < data["pages"] - 1:
-        #     yield vacancies_request.make_search_by_text(
-        #         self, kwargs["country"], kwargs["text"], data["page"] + 1
-        #     )
+        # Пагинация
+        if data["page"] < data["pages"] - 1:
+            yield vacancies_request.make_search_by_text(
+                self,
+                kwargs["country"],
+                kwargs["text"],
+                data["page"] + 1,
+                kwargs['excluded_text'],
+            )
 
     def parse_vacancy(self, response: HtmlResponse, **kwargs) -> Generator:
         kwargs["vacancy"] = response.json()
