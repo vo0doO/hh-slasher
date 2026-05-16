@@ -25,4 +25,4 @@ import_results_in_google_spreadsheet:
 
 all:
 	make scrape
-	make import_results_in_google_spreadsheet
+# 	make import_results_in_google_spreadsheet

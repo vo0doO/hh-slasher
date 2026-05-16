@@ -58,11 +58,11 @@ class Spider(scrapy.Spider):
         # "company_name",
     ]
     search_texts = [
-        "Vue",
+        "Python разработчик",
     ]
     excluded_text = [
-        "Fullstack",
-        "Full stack",
+        # "Fullstack",
+        # "Full stack",
     ]
 
     def start_requests(self) -> Generator:
