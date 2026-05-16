@@ -52,18 +52,36 @@ class Spider(scrapy.Spider):
         #     "areas": [48],
         # },
     }
-    search_field = [
-        "name",
-        "description",
-        # "company_name",
-    ]
-    search_texts = [
-        "Python разработчик",
-    ]
-    excluded_text = [
-        # "Fullstack",
-        # "Full stack",
-    ]
+
+    def __init__(
+        self,
+        search_texts=None,
+        excluded_text=None,
+        search_field=[
+            "name",
+            "description",
+            # "company_name",
+        ],
+        *args,
+        **kwargs,
+    ):
+        super().__init__(*args, **kwargs)
+
+        if search_field is not None:
+            if not isinstance(search_field, list):
+                self.search_field = self._parse_list(search_field)
+            else:
+                self.search_field = search_field
+        if search_texts is not None:
+            self.search_texts = self._parse_list(search_texts)
+        if excluded_text is not None:
+            self.excluded_text = self._parse_list(excluded_text)
+
+    @staticmethod
+    def _parse_list(value) -> list[str]:
+        if isinstance(value, str):
+            return [v.strip() for v in value.split(",") if v.strip()]
+        return list(value)
 
     def start_requests(self) -> Generator:
         # self.cached_vacancies = cached_vacancies.get(self)

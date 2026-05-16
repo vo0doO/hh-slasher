@@ -18,7 +18,7 @@ download_logs:
 	scp -r -i "~/.ssh/whoosh_rsa" ${ssh_server}:${project_dir}/logs/*.log ./logs/  
 
 scrape:
-	uv run scrapy crawl hh --logfile ./logs/hh.log
+	uv run scrapy crawl hh --logfile ./logs/hh.log -a search_texts="Python разработчик" -a excluded_text="Java,C#" -a search_field="name,description,company_name"
 
 import_results_in_google_spreadsheet:
 	uv run python -m cli.google-sheets-importer > ./logs/google-sheets-importer.log 2>&1
